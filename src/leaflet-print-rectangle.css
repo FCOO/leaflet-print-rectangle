@@ -1,0 +1,84 @@
+/***********************************************
+	LEAFLET-PRINT-RECTANGLE.SCSS, Leaflet-object to mark a fixed-ratio area on the map witch is to be printed
+
+	(c) 2015, Niels Holt
+
+	https://github.com/NielsHolt/leaflet-print-rectangle
+	https://github.com/NielsHolt
+
+
+************************************************/
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000314}}
+.lpr-shade {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000319}}
+.lpr-marker {
+  box-sizing: border-box;
+  background-color: transparent;
+  opacity: 1.0;
+  border-style: none;
+  border-width: 0.1875rem;
+  border-color: transparent;
+  border: 0.25rem none transparent;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000331}}
+.lpr-marker.left {
+  border-left: 0.25rem solid black;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000332}}
+.lpr-marker.right {
+  border-right: 0.25rem solid black;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000333}}
+.lpr-marker.top {
+  border-top: 0.25rem solid black;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000334}}
+.lpr-marker.bottom {
+  border-bottom: 0.25rem solid black;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000337}}
+.lpr-marker.center.middle {
+  border: 0.25rem solid black;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000340}}
+.lpr-marker.left.top {
+  cursor: nw-resize;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000341}}
+.lpr-marker.center.top {
+  cursor: n-resize;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000342}}
+.lpr-marker.right.top {
+  cursor: ne-resize;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000343}}
+.lpr-marker.left.middle {
+  cursor: w-resize;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000344}}
+.lpr-marker.center.middle {
+  cursor: move;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000345}}
+.lpr-marker.right.middle {
+  cursor: e-resize;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000346}}
+.lpr-marker.left.bottom {
+  cursor: sw-resize;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000347}}
+.lpr-marker.center.bottom {
+  cursor: s-resize;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/web-dev\/leaflet-print-rectangle\/src\/leaflet-print-rectangle\.scss}line{font-family:\0000348}}
+.lpr-marker.right.bottom {
+  cursor: se-resize;
+}
+
+/*# sourceMappingURL=leaflet-print-rectangle.css.map */

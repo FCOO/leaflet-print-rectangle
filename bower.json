@@ -1,0 +1,35 @@
+{
+  "name": "leaflet-print-rectangle",
+  "version": "0.0.1",
+  "homepage": "https://github.com/NielsHolt/leaflet-print-rectangle",
+  "authors": [
+    "Niels Holt <niels@steenbuchholt.dk>"
+  ],
+  "description": "Leaflet-object to mark a fixed-ratio area on the map witch is to be printed",
+  "main": [
+    "dist/leaflet-print-rectangle.min.js",
+    "dist/leaflet-print-rectangle.min.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/NielsHolt/leaflet-print-rectangle.git"
+  },
+  "dependencies": {
+    "jquery": "^1.9",
+    "leaflet": "^0.7.3"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "moduleType": [
+    "es6"
+  ],
+  "devDependencies": {
+    "bourbon": "~4.2.4"
+  }
+}

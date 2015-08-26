@@ -1,0 +1,31 @@
+{
+  "name": "leaflet-print-rectangle",
+  "version": "0.0.1",
+  "description": "package.json is only use for building the package. see bower.json for more info",
+  "main": "dist/leaflet-print-rectangle.min.js",
+  "devDependencies": {
+    "bourbon": "latest",
+    "jshint": "latest",
+    "uglifyjs": "latest"
+  },
+  "jshintConfig": {
+    "globals": {
+      "L": false,
+      "$": false,
+			"jQuery": false,
+      "console": false,
+      "DEBUG": false,
+			"document": false,
+			"alert"		: false
+    },
+    "undef": true,
+    "unused": true
+  },
+  "scripts": {
+    "lint": "jshint src/leaflet-print-rectangle.js",
+    "build:css": "sass src/leaflet-print-rectangle.scss dist/leaflet-print-rectangle.min.css --style compressed",
+		"build:js": "uglifyjs src/leaflet-print-rectangle.js -c -m -o dist/leaflet-print-rectangle.min.js",
+    "build": "npm run build:css && npm run build:js",
+    "prebuild:js": "npm run lint"
+  }
+}

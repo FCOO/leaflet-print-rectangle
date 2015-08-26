@@ -1,0 +1,49 @@
+/***********************************************
+	LEAFLET-PRINT-RECTANGLE.SCSS, Leaflet-object to mark a fixed-ratio area on the map witch is to be printed
+
+	(c) 2015, Niels Holt
+
+	https://github.com/NielsHolt/leaflet-print-rectangle
+	https://github.com/NielsHolt
+
+
+************************************************/
+//BOURBON - http://bourbon.io/
+@import "../bower_components/bourbon/app/assets/stylesheets/bourbon";
+
+.lpr-shade {
+	position	: absolute;
+	background: rgba(0,0,0, 0.4);
+}
+
+.lpr-marker {
+	box-sizing: border-box;
+	background-color: transparent;
+	opacity	: 1.0; 	
+
+	//Border
+	border-style: none;
+	border-width: rem(3px);
+	border-color: transparent;
+	border	: rem(4px) none transparent;
+	$border	: rem(4px) solid black;
+
+	&.left		{ border-left		: $border; }
+	&.right		{ border-right	: $border; }
+	&.top			{ border-top		: $border; }
+	&.bottom	{ border-bottom	: $border; }
+	
+	//Special case for move-marker
+	&.center.middle	{ border: $border;	}
+	
+	//Cursor
+	&.left.top			{ cursor: nw-resize;}
+	&.center.top		{ cursor: n-resize; }
+	&.right.top			{ cursor: ne-resize;}
+	&.left.middle		{ cursor: w-resize; }
+	&.center.middle	{ cursor: move;			}
+	&.right.middle	{ cursor: e-resize;	}
+	&.left.bottom		{ cursor: sw-resize;}
+	&.center.bottom	{ cursor: s-resize;	}
+	&.right.bottom	{ cursor: se-resize;}
+}
