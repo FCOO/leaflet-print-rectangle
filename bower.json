@@ -15,8 +15,7 @@
     "url": "git://github.com/NielsHolt/leaflet-print-rectangle.git"
   },
   "dependencies": {
-    "jquery": "^1.9",
-    "leaflet": "^0.7.3"
+    "leaflet": "latest"
   },
   "license": "MIT",
   "ignore": [
@@ -30,6 +29,6 @@
     "es6"
   ],
   "devDependencies": {
-    "bourbon": "~4.2.4"
+    "bourbon": "latest"
   }
 }
