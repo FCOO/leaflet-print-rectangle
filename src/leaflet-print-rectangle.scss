@@ -37,13 +37,13 @@
 	&.center.middle	{ border: $border;	}
 	
 	//Cursor
-	&.left.top			{ cursor: nw-resize;}
-	&.center.top		{ cursor: n-resize; }
-	&.right.top			{ cursor: ne-resize;}
-	&.left.middle		{ cursor: w-resize; }
+	&.left.top		{ cursor: nw-resize;}
+	&.center.top	{ cursor: n-resize; }
+	&.right.top		{ cursor: ne-resize;}
+	&.left.middle	{ cursor: w-resize; }
 	&.center.middle	{ cursor: move;			}
 	&.right.middle	{ cursor: e-resize;	}
-	&.left.bottom		{ cursor: sw-resize;}
+	&.left.bottom	{ cursor: sw-resize;}
 	&.center.bottom	{ cursor: s-resize;	}
 	&.right.bottom	{ cursor: se-resize;}
 }
