@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="da" style="font-size: 100%">
+<head>
+	<title>fcoo.dk - leaflet-print-rectangle - Demo</title>
+	<meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta http-equiv='x-dns-prefetch-control' content='on'>
+
+	<meta name='copyright' content='FCOO'>
+	<meta name='owner' content='FCOO'>
+
+  <link  href="bower_components.css" rel="stylesheet">	
+  <link  href="../src/leaflet-print-rectangle.css" rel="stylesheet">	
+</head>
+
+<body>
+	<div id="map" style="width: 800px; height: 600px"></div>
+	<button id="btnShow" class="hide-for-leaflet-print-rectangle">Show rectangle</button>
+	<button id="btnHide" class="show-for-leaflet-print-rectangle">Hide rectangle</button>
+	<select id="selRatio" class="show-for-leaflet-print-rectangle">
+		<option value="1/1">1/1</option>
+		<option value="3/4" selected>3/4 or 4/3</option>
+		<option value="2/3">2/3 or 3/2</option>
+		<option value="1/2">1/2 or 2/1</option>
+		<option value="1/4">1/4 or 4/1</option>
+	</select>
+		
+	
+	
+	<script src="bower_components.js"></script>
+	<script src="../src/leaflet-print-rectangle.js"></script>
+	<script>
+		$(function() {
+			var map = L.map('map').setView([56.2, 11.5], 6);
+			L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				minZoom: 4,
+				maxZoom: 18,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors</a>'
+      }).addTo(map);
+
+			var myPrintRectangle = new L.printRectangle();
+
+			$('#btnShow').click( function(){ myPrintRectangle.addTo(map);				} );
+			$('#btnHide').click( function(){ myPrintRectangle.remove();	} );
+			$('#selRatio').on('change', function( event ){
+				var newRatio = eval( event.target.selectedOptions[0].value );
+				myPrintRectangle.setRatio( newRatio, true );
+			});
+
+    });
+
+	</script>
+</body>
+</html>

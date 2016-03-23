@@ -1,15 +1,24 @@
 /***********************************************
-	LEAFLET-PRINT-RECTANGLE.SCSS, Leaflet-object to mark a fixed-ratio area on the map witch is to be printed
+	leaflet-print-rectangle.scss, 
 
-	(c) 2015, Niels Holt
+	(c) 2016, FCOO
 
-	https://github.com/NielsHolt/leaflet-print-rectangle
-	https://github.com/NielsHolt
+	https://github.com/FCOO/leaflet-print-rectangle
+	https://github.com/FCOO
 
 
 ************************************************/
 //BOURBON - http://bourbon.io/
 @import "../bower_components/bourbon/app/assets/stylesheets/bourbon";
+
+//MODERNIZR-MIXIN - https://github.com/danielguillan/modernizr-mixin
+@import "../bower_components/modernizr-mixin/stylesheets/modernizr";
+
+//MATHSASS - https://github.com/terkel/mathsass
+@import "../bower_components/mathsass/dist/math";
+
+//MODERNIZR-SCSS - https://github.com/fcoo/modernizr-scss
+@import "../bower_components/modernizr-scss/dist/modernizr-scss";
 
 .lpr-shade {
 	position	: absolute;
@@ -47,3 +56,6 @@
 	&.center.bottom	{ cursor: s-resize;	}
 	&.right.bottom	{ cursor: se-resize;}
 }
+
+//Create show/hide-classes for Modernizr-test leaflet-print-rectangle
+@include show-and-hide-for-modernizr-test( leaflet-print-rectangle, '', false );

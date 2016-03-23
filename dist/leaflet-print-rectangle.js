@@ -33,7 +33,7 @@
 		includes: L.Mixin.Events,
 
 		options: {
-			VERSION			: "{VERSION}",
+			VERSION			: "1.0.0",
 			ratio				: 3/2,
 			allowRotate	: true,
 			markerDim		: 20
