@@ -488,10 +488,10 @@
 			$('html').removeClass(modernizrTestName);
 			$('html').addClass('no-'+modernizrTestName);
 
-			this.map.off('zoomend', this._onMapZoom);
-	    this.map.off('moveend', this._onMapChange);
-	    this.map.off('resize', this._onMapChange);
-	    this.map.off('drag', this._onMapChange);
+			this.map.off('zoomend', this._onMapZoom, this);
+	    this.map.off('moveend', this._onMapChange, this);
+	    this.map.off('resize', this._onMapChange, this);
+	    this.map.off('drag', this._onMapChange, this);
 
 			this.map.removeLayer(this.featureGroup);
 			this.map.removeLayer(this.polygon);

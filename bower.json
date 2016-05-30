@@ -1,14 +1,14 @@
 {
   "name": "leaflet-print-rectangle",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/FCOO/leaflet-print-rectangle",
   "authors": [
     "NielsHolt"
   ],
   "description": "",
   "main": [
-    "dist/leaflet-print-rectangle.min.js",
-    "dist/leaflet-print-rectangle.min.css"
+    "dist/leaflet-print-rectangle.js",
+    "dist/leaflet-print-rectangle.css"
   ],
   "repository": {
     "type": "git",
