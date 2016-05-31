@@ -164,9 +164,8 @@
 			this._update();
 			this.setRatio( this.whRatio );
 
-			if (this.options.allowRotate){
-				this.polygon.on('click', this.rotate, this);
-			}
+			if (this.options.allowRotate)
+				this._map.on('click', this.rotate, this);
 
 			//Add zoom-event to the map to update after map zoom
 			this._map.on('drag', this._onMapChange, this);
@@ -174,7 +173,7 @@
 	    this._map.on('moveend', this._onMapChange, this);
 	    this._map.on('resize', this._onMapChange, this);
 
-			this._map.freeze({ allowZoomAndPan: true});
+			this._map.freeze({ allowZoomAndPan: true, allowClick:true});
 		},
 
 
@@ -189,6 +188,9 @@
 	    this._map.off('moveend',	this._onMapChange,	this);
 	    this._map.off('resize',		this._onMapChange,	this);
 	    this._map.off('drag',			this._onMapChange,	this);
+
+			if (this.options.allowRotate)
+				this._map.off('click', this.rotate, this);
 
 			this._map.removeLayer(this.featureGroup);
 			this._map.removeLayer(this.polygon);
