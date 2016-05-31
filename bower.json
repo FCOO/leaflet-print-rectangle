@@ -1,6 +1,6 @@
 {
   "name": "leaflet-print-rectangle",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "homepage": "https://github.com/FCOO/leaflet-print-rectangle",
   "authors": [
     "NielsHolt"
@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "jquery": "latest",
-    "leaflet": "latest"
+    "leaflet": "latest",
+    "leaflet-freeze": "fcoo/leaflet-freeze#1.*"
   },
   "devDependencies": {
     "bourbon": "latest",

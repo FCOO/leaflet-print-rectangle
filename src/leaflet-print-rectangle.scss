@@ -62,8 +62,3 @@
 //Create show/hide-classes for Modernizr-test leaflet-print-rectangle
 @include show-and-hide-for-modernizr-test( leaflet-print-rectangle, '', false, '', false );
 
-
-
-.leaflet-overlay-pane {
- //z-index: 7 !important;
-}

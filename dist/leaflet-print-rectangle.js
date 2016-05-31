@@ -33,7 +33,7 @@
 		includes: L.Mixin.Events,
 
 		options: {
-			VERSION			: "1.0.2",
+			VERSION			: "1.1.0",
 			ratio				: 3/2,
 			allowRotate	: true,
 			markerDim		: 20
@@ -55,11 +55,7 @@
 		addTo
 		**************************************************************************************/
 		addTo: function(map) {
-			this.map = map;
-
-			//Update modernizr-classes
-			$('html').removeClass('no-'+modernizrTestName);
-			$('html').addClass(modernizrTestName);
+			this._map = map;
 
 			//Create the L.Rectangle
 			var mapBounds = map.getBounds();
@@ -108,7 +104,7 @@
 					markerOptions.icon = L.divIcon(divIconOptions);
 					nextResizeMarker = L.marker( [0,0], markerOptions);
 					nextResizeMarker.type = type;
-					nextResizeMarker._map = this.map;
+					nextResizeMarker._map = this._map;
 
 					//Adding events to the marker
 					nextResizeMarker.on( 'dragstart', this._marker_onDragStart, this );
@@ -123,24 +119,37 @@
 			this.centerMarker = this.resizeMarkers[ posCenter + posMiddle ];
 			this.fixedMarker = this.centerMarker;
 
-			this.polygon.addTo(this.map);
-			this.polygon.bringToFront();
-
-			this.featureGroup.addTo(this.map);
-
-
 			//Create four	shadow boxes/div
-			this._container		= L.DomUtil.create("div", "lpr-container", this.map._controlContainer);
+			this._container		= L.DomUtil.create("div", "lpr-container", this._map._controlContainer);
 			this._topShade		= L.DomUtil.create("div", "lpr-shade", this._container);
 			this._bottomShade	= L.DomUtil.create("div", "lpr-shade", this._container);
 			this._leftShade		= L.DomUtil.create("div", "lpr-shade", this._container);
 			this._rightShade	= L.DomUtil.create("div", "lpr-shade", this._container);
 
+			return this;
+		},
+
+		/**************************************************************************************
+		show: freeze the map and show/add the elements
+		**************************************************************************************/
+		show: function(){
+			//Update modernizr-classes
+			$('html').removeClass('no-'+modernizrTestName);
+			$('html').addClass(modernizrTestName);
+
+			//Add elements to the map
+			this.polygon.addTo(this._map);
+			this.polygon.bringToFront();
+
+			this.featureGroup.addTo(this._map);
+
+			$(this._container).show();
+
 			//Prevent contextmenu on any shade
 			L.DomEvent.addListener(this._container, 'contextmenu', L.DomEvent.stop);
 
 
-			var pixelBounds	= this.map.getPixelBounds();
+			var pixelBounds	= this._map.getPixelBounds();
 			this.pixelWidth		= this.initSizeRatio*pixelBounds.getSize().x;
 			this.pixelHeight	= this.initSizeRatio*pixelBounds.getSize().y;
 
@@ -160,13 +169,109 @@
 			}
 
 			//Add zoom-event to the map to update after map zoom
-			this.map.on('drag', this._onMapChange, this);
-			this.map.on('zoomend', this._onMapZoom, this);
-	    this.map.on('moveend', this._onMapChange, this);
-	    this.map.on('resize', this._onMapChange, this);
+			this._map.on('drag', this._onMapChange, this);
+			this._map.on('zoomend', this._onMapZoom, this);
+	    this._map.on('moveend', this._onMapChange, this);
+	    this._map.on('resize', this._onMapChange, this);
 
-			return this;
+			this._map.freeze({ allowZoomAndPan: true});
 		},
+
+
+		/**************************************************************************************
+		hide
+		**************************************************************************************/
+		hide: function(){
+			$('html').removeClass(modernizrTestName);
+			$('html').addClass('no-'+modernizrTestName);
+
+			this._map.off('zoomend',	this._onMapZoom,		this);
+	    this._map.off('moveend',	this._onMapChange,	this);
+	    this._map.off('resize',		this._onMapChange,	this);
+	    this._map.off('drag',			this._onMapChange,	this);
+
+			this._map.removeLayer(this.featureGroup);
+			this._map.removeLayer(this.polygon);
+
+			$(this._container).hide();
+
+			this._map.thaw();
+		},
+
+
+		/**************************************************************************************
+		remove
+		**************************************************************************************/
+		remove: function(){
+			this.hide();
+			this._container.remove();
+		},
+
+
+		/**************************************************************************************
+		setRatio: sets the ratio and update the rectangle (if it is visible)
+		**************************************************************************************/
+		setRatio: function( ratio, keepMode ){
+			if (keepMode)
+			  if ( (this.isLandscape && (ratio < 1)) || (!this.isLandscape && (ratio >= 1)) )
+			    ratio = 1/ratio;
+
+			this.whRatio = ratio;
+			this.isLandscape = ratio >= 1;
+			this._calcPointBounds();
+
+			if (this.whRatio > 1){
+			  this.minHeight = this.minimumDim;
+				this.minWidth = this.minHeight*this.whRatio;
+			}
+			else {
+			  this.minWidth = this.minimumDim;
+				this.minHeight = this.minWidth/this.whRatio;
+			}
+
+			//Use the longest side as new dim
+			var dim = Math.max(this.pixelWidth, this.pixelHeight);
+			if (this.whRatio < 1){
+			  this.pixelHeight = dim;
+				this.pixelWidth = this.pixelHeight*this.whRatio;
+			}
+			else {
+			  this.pixelWidth = dim;
+				this.pixelHeight = this.pixelWidth/this.whRatio;
+			}
+
+			//Adjust dim with max
+			this._calcDrawPointBounds();
+
+			//v = Math.max( Math.min(v, max), min)
+			this.pixelHeight	= Math.max( this.minHeight, Math.min( this.pixelHeight, this.dragHeight) );
+			this.pixelWidth		= Math.max( this.minWidth, Math.min( this.pixelWidth, this.dragWidth) );
+			if (this.pixelWidth > this.pixelHeight*this.whRatio)
+				this.pixelWidth = this.pixelHeight*this.whRatio;
+			else
+				this.pixelHeight = this.pixelWidth/this.whRatio;
+
+			this._update();
+
+			if (!this.maxBounds.contains( this.polygon.getBounds() ) ){
+			  //Move the rectangle inside the map bounds
+				this.middle = this.middle	+ Math.max(0, this.dragTop - this.top)		- Math.max(0, this.bottom - this.dragBottom);
+				this.center = this.center	+ Math.max(0, this.dragLeft - this.left)	- Math.max(0, this.right - this.dragRight);
+				this._update();
+			}
+		},
+
+		/**************************************************************************************
+		rotate: rotate the rectangle
+		**************************************************************************************/
+		rotate: function(){
+			this.setRatio( 1/this.whRatio );
+		},
+
+
+
+
+
 
 		/**************************************************************************************
 		_update: Adjust the rectangle and the resizeMarkers by Calculate the left, right, top,
@@ -205,10 +310,10 @@
 			this.middle = this.top + ( this.bottom - this.top )/2;
 
 			//Calculate the latLng-corners
-			this.southWest = this.map.containerPointToLatLng( [this.left,		this.bottom] );
-			this.northWest = this.map.containerPointToLatLng( [this.left,		this.top   ] );
-			this.northEast = this.map.containerPointToLatLng( [this.right,	this.top   ] );
-			this.southEast = this.map.containerPointToLatLng( [this.right,	this.bottom] );
+			this.southWest = this._map.containerPointToLatLng( [this.left,	this.bottom] );
+			this.northWest = this._map.containerPointToLatLng( [this.left,	this.top   ] );
+			this.northEast = this._map.containerPointToLatLng( [this.right,	this.top   ] );
+			this.southEast = this._map.containerPointToLatLng( [this.right,	this.bottom] );
 
 			//Resize the polygon
 			this.polygon.setLatLngs([ this.southWest, this.northWest, this.northEast, this.southEast ]);
@@ -220,13 +325,13 @@
 			this.resizeMarkers[posRight + posBottom	]._setPosByLeftTop(this.right,	this.bottom	);
 
 			//Move the resize marker on the four sides
-			this.resizeMarkers[ posLeft		+ posMiddle ]._setPosByLeftTop(this.left,		this.middle	); //setLatLng( this.map.containerPointToLatLng( [this.left,	 this.middle	] ) );
-			this.resizeMarkers[ posRight	+ posMiddle ]._setPosByLeftTop(this.right,	this.middle	); //setLatLng( this.map.containerPointToLatLng( [this.right,	 this.middle] ) );
-			this.resizeMarkers[ posCenter	+ posTop		]._setPosByLeftTop(this.center,	this.top		); //setLatLng( this.map.containerPointToLatLng( [this.center, this.top		] ) );
-			this.resizeMarkers[ posCenter	+ posBottom ]._setPosByLeftTop(this.center,	this.bottom	); //setLatLng( this.map.containerPointToLatLng( [this.center, this.bottom	] ) );
+			this.resizeMarkers[ posLeft		+ posMiddle ]._setPosByLeftTop(this.left,		this.middle	);
+			this.resizeMarkers[ posRight	+ posMiddle ]._setPosByLeftTop(this.right,	this.middle	);
+			this.resizeMarkers[ posCenter	+ posTop		]._setPosByLeftTop(this.center,	this.top		);
+			this.resizeMarkers[ posCenter	+ posBottom ]._setPosByLeftTop(this.center,	this.bottom	);
 
 			//Move the center/midle marker
-			this.resizeMarkers[ posCenter	+ posMiddle ]._setPosByLeftTop(this.center, this.middle); //setLatLng( this.map.containerPointToLatLng( [this.center, this.middle] ) );
+			this.resizeMarkers[ posCenter	+ posMiddle ]._setPosByLeftTop(this.center, this.middle);
 
 			//Resize and move the shade-divs
 			function setDimensions(element, dimension) {
@@ -239,7 +344,7 @@
 				element.style.right		= dimension.right + "px";
 			}
 
-			var size = this.map.getSize();
+			var size = this._map.getSize();
 			setDimensions(this._topShade,			{ width: size.x,						height: this.top,						top		: 0,				left	: 0 });
 			setDimensions(this._bottomShade,	{ width: size.x,						height: size.y-this.bottom,	bottom: 0,				left	: 0 });
 			setDimensions(this._leftShade,		{	width: this.left,					height: this.pixelHeight,		top		: this.top,	left	: 0 });
@@ -252,8 +357,8 @@
 		_calcPointBounds: Calculate the point/pixel position of the rectangle based on the (latLng)bounds
 		**************************************************************************************/
 		_calcPointBounds: function(){
-			var NWPoint = this.map.latLngToContainerPoint( this.polygon.getBounds().getNorthWest() );
-			var SEPoint = this.map.latLngToContainerPoint( this.polygon.getBounds().getSouthEast() );
+			var NWPoint = this._map.latLngToContainerPoint( this.polygon.getBounds().getNorthWest() );
+			var SEPoint = this._map.latLngToContainerPoint( this.polygon.getBounds().getSouthEast() );
 			this.left = NWPoint.x;
 			this.top = NWPoint.y;
 			this.right = SEPoint.x;
@@ -270,9 +375,9 @@
 		wheb it is beeing dragged or moved
 		**************************************************************************************/
 		_calcDrawPointBounds: function(){
-			this.maxBounds = this.map.options.maxBounds ? this.map.options.maxBounds : L.latLngBounds([-90, 180], [90, -180]);		//this.map.getBounds();
-			var mapNWPoint = this.map.latLngToContainerPoint( this.maxBounds.getNorthWest() );
-			var mapSEPoint = this.map.latLngToContainerPoint( this.maxBounds.getSouthEast() );
+			this.maxBounds = this._map.options.maxBounds ? this._map.options.maxBounds : L.latLngBounds([-90, 180], [90, -180]);
+			var mapNWPoint = this._map.latLngToContainerPoint( this.maxBounds.getNorthWest() );
+			var mapSEPoint = this._map.latLngToContainerPoint( this.maxBounds.getSouthEast() );
 			this.dragLeft		= mapNWPoint.x;
 			this.dragTop		= mapNWPoint.y;
 			this.dragRight	= mapSEPoint.x;
@@ -374,8 +479,8 @@
 				}
 			}
 
-			this.dragBounds = L.latLngBounds( this.map.containerPointToLatLng([this.dragLeft		, this.dragBottom])	/*southWest*/,
-																				this.map.containerPointToLatLng([this.dragRight	, this.dragTop])			/*northEast*/
+			this.dragBounds = L.latLngBounds( this._map.containerPointToLatLng([this.dragLeft		, this.dragBottom])	/*southWest*/,
+																				this._map.containerPointToLatLng([this.dragRight	, this.dragTop])			/*northEast*/
 																			);
 		},
 
@@ -393,14 +498,14 @@
 			}
 
 			if (this.isMoving){
-				var centerPoint = this.map.latLngToContainerPoint( latLng );
+				var centerPoint = this._map.latLngToContainerPoint( latLng );
 				this.center = centerPoint.x;
 				this.middle = centerPoint.y;
 			}
 			else {
 				//Calculate the new pixelWidth and pixelHeight by using the dim of the box set by the fixed and the dragged marker
-				var fixedPoint = this.map.latLngToContainerPoint( this.fixedMarker.getLatLng() );
-				var dragPoint = this.map.latLngToContainerPoint( latLng );
+				var fixedPoint = this._map.latLngToContainerPoint( this.fixedMarker.getLatLng() );
+				var dragPoint = this._map.latLngToContainerPoint( latLng );
 				this.pixelWidth = Math.abs( fixedPoint.x - dragPoint.x);
 				this.pixelHeight = Math.abs( fixedPoint.y - dragPoint.y);
 				this.pixelWidth		= Math.max( this.pixelWidth, this.pixelHeight*this.whRatio);
@@ -419,85 +524,6 @@
 			this.fixedMarker = this.centerMarker;
 			this.isMoving = false;
 		},
-
-		/**************************************************************************************
-		setRatio: sets the ratio and update the rectangle (if it is visible)
-		**************************************************************************************/
-		setRatio: function( ratio, keepMode ){
-			if (keepMode)
-			  if ( (this.isLandscape && (ratio < 1)) || (!this.isLandscape && (ratio >= 1)) )
-			    ratio = 1/ratio;
-
-			this.whRatio = ratio;
-			this.isLandscape = ratio >= 1;
-			this._calcPointBounds();
-
-			if (this.whRatio > 1){
-			  this.minHeight = this.minimumDim;
-				this.minWidth = this.minHeight*this.whRatio;
-			}
-			else {
-			  this.minWidth = this.minimumDim;
-				this.minHeight = this.minWidth/this.whRatio;
-			}
-
-			//Use the longest side as new dim
-			var dim = Math.max(this.pixelWidth, this.pixelHeight);
-			if (this.whRatio < 1){
-			  this.pixelHeight = dim;
-				this.pixelWidth = this.pixelHeight*this.whRatio;
-			}
-			else {
-			  this.pixelWidth = dim;
-				this.pixelHeight = this.pixelWidth/this.whRatio;
-			}
-
-			//Adjust dim with max
-			this._calcDrawPointBounds();
-
-			//v = Math.max( Math.min(v, max), min)
-			this.pixelHeight	= Math.max( this.minHeight, Math.min( this.pixelHeight, this.dragHeight) );
-			this.pixelWidth		= Math.max( this.minWidth, Math.min( this.pixelWidth, this.dragWidth) );
-			if (this.pixelWidth > this.pixelHeight*this.whRatio)
-				this.pixelWidth = this.pixelHeight*this.whRatio;
-			else
-				this.pixelHeight = this.pixelWidth/this.whRatio;
-
-			this._update();
-
-			if (!this.maxBounds.contains( this.polygon.getBounds() ) ){
-			  //Move the rectangle inside the map bounds
-				this.middle = this.middle	+ Math.max(0, this.dragTop - this.top)		- Math.max(0, this.bottom - this.dragBottom);
-				this.center = this.center	+ Math.max(0, this.dragLeft - this.left)	- Math.max(0, this.right - this.dragRight);
-				this._update();
-			}
-		},
-
-		/**************************************************************************************
-		rotate: rotate the rectangle
-		**************************************************************************************/
-		rotate: function(){
-			this.setRatio( 1/this.whRatio );
-		},
-
-
-		/**************************************************************************************
-		remove
-		**************************************************************************************/
-		remove: function(){
-			$('html').removeClass(modernizrTestName);
-			$('html').addClass('no-'+modernizrTestName);
-
-			this.map.off('zoomend', this._onMapZoom, this);
-	    this.map.off('moveend', this._onMapChange, this);
-	    this.map.off('resize', this._onMapChange, this);
-	    this.map.off('drag', this._onMapChange, this);
-
-			this.map.removeLayer(this.featureGroup);
-			this.map.removeLayer(this.polygon);
-			this._container.remove();
-		},
-
 	}); //end of L.PrintRectangle
 
 	L.printRectangle = function(options) {

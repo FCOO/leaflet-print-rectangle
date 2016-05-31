@@ -10,8 +10,7 @@
 ************************************************/
 .lpr-shade {
   position: absolute;
-  background: rgba(0, 0, 0, 0.4);
-}
+  background: rgba(0, 0, 0, 0.4); }
 
 .lpr-marker {
   box-sizing: border-box;
@@ -21,57 +20,38 @@
   border-style: none;
   border-width: 0.1875rem;
   border-color: transparent;
-  border: 0.25rem none transparent;
-}
-.lpr-marker.left {
-  border-left: 0.25rem solid black;
-}
-.lpr-marker.right {
-  border-right: 0.25rem solid black;
-}
-.lpr-marker.top {
-  border-top: 0.25rem solid black;
-}
-.lpr-marker.bottom {
-  border-bottom: 0.25rem solid black;
-}
-.lpr-marker.center.middle {
-  border: 0.25rem solid black;
-}
-.lpr-marker.left.top {
-  cursor: nw-resize;
-}
-.lpr-marker.center.top {
-  cursor: n-resize;
-}
-.lpr-marker.right.top {
-  cursor: ne-resize;
-}
-.lpr-marker.left.middle {
-  cursor: w-resize;
-}
-.lpr-marker.center.middle {
-  cursor: move;
-}
-.lpr-marker.right.middle {
-  cursor: e-resize;
-}
-.lpr-marker.left.bottom {
-  cursor: sw-resize;
-}
-.lpr-marker.center.bottom {
-  cursor: s-resize;
-}
-.lpr-marker.right.bottom {
-  cursor: se-resize;
-}
+  border: 0.25rem none transparent; }
+  .lpr-marker.left {
+    border-left: 0.25rem solid black; }
+  .lpr-marker.right {
+    border-right: 0.25rem solid black; }
+  .lpr-marker.top {
+    border-top: 0.25rem solid black; }
+  .lpr-marker.bottom {
+    border-bottom: 0.25rem solid black; }
+  .lpr-marker.center.middle {
+    border: 0.25rem solid black; }
+  .lpr-marker.left.top {
+    cursor: nw-resize; }
+  .lpr-marker.center.top {
+    cursor: n-resize; }
+  .lpr-marker.right.top {
+    cursor: ne-resize; }
+  .lpr-marker.left.middle {
+    cursor: w-resize; }
+  .lpr-marker.center.middle {
+    cursor: move; }
+  .lpr-marker.right.middle {
+    cursor: e-resize; }
+  .lpr-marker.left.bottom {
+    cursor: sw-resize; }
+  .lpr-marker.center.bottom {
+    cursor: s-resize; }
+  .lpr-marker.right.bottom {
+    cursor: se-resize; }
 
 .leaflet-print-rectangle .hide-for-leaflet-print-rectangle {
-  display: none !important;
-}
+  display: none !important; }
 
 .no-leaflet-print-rectangle .show-for-leaflet-print-rectangle {
-  display: none !important;
-}
-
-/*# sourceMappingURL=leaflet-print-rectangle.css.map */
+  display: none !important; }

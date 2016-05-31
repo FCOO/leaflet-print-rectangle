@@ -38,13 +38,16 @@
 				maxZoom: 18,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors</a>'
       }).addTo(map);
+
+		$(map.attributionControl.getContainer()).addClass('hide-for-leaflet-print-rectangle');
+
 		L.marker([56.2, 11.5]).addTo(map)
 			.bindPopup('A pretty CSS3 popup.<br> Easily customizable.');
 
-			var myPrintRectangle = new L.printRectangle();
+			var myPrintRectangle = new L.printRectangle().addTo(map);
 
-			$('#btnShow').click( function(){ myPrintRectangle.addTo(map);				} );
-			$('#btnHide').click( function(){ myPrintRectangle.remove();	} );
+			$('#btnShow').click( function(){ myPrintRectangle.show();				} );
+			$('#btnHide').click( function(){ myPrintRectangle.hide();	} );
 			$('#selRatio').on('change', function( event ){
 				var newRatio = eval( event.target.selectedOptions[0].value );
 				myPrintRectangle.setRatio( newRatio, true );

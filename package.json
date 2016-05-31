@@ -1,6 +1,6 @@
 {
   "name": "leaflet-print-rectangle",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "homepage": "https://github.com/FCOO/leaflet-print-rectangle",
   "author": "Niels Holt nho@fcoo.dk",
   "description": "package.json is only use for building the package. see bower.json for more info",
