@@ -30,6 +30,8 @@
 	background-color: transparent;
 	opacity	: 1.0; 	
 
+	z-index: 9999 !important; //To place them over marker
+	
 	//Border
 	border-style: none;
 	border-width: rem(3px);
@@ -58,4 +60,10 @@
 }
 
 //Create show/hide-classes for Modernizr-test leaflet-print-rectangle
-@include show-and-hide-for-modernizr-test( leaflet-print-rectangle, '', false );
+@include show-and-hide-for-modernizr-test( leaflet-print-rectangle, '', false, '', false );
+
+
+
+.leaflet-overlay-pane {
+ //z-index: 7 !important;
+}

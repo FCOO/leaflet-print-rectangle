@@ -127,10 +127,10 @@
 			this.polygon.bringToFront();
 
 			this.featureGroup.addTo(this.map);
-
+console.log(this.featureGroup);
 
 			//Create four	shadow boxes/div
-			this._container		= L.DomUtil.create("div", "lpr-container", this.map._controlContainer);
+			this._container		= L.DomUtil.create("div", "lpr-container", this.map._controlContainer); //
 			this._topShade		= L.DomUtil.create("div", "lpr-shade", this._container);
 			this._bottomShade	= L.DomUtil.create("div", "lpr-shade", this._container);
 			this._leftShade		= L.DomUtil.create("div", "lpr-shade", this._container);

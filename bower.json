@@ -22,7 +22,7 @@
     "bourbon": "latest",
     "modernizr-mixin": "latest",
     "mathsass": "latest",
-    "modernizr-scss": "fcoo/modernizr-scss#^1.3.0"
+    "modernizr-scss": "fcoo/modernizr-scss#2.*"
   },
   "license": "MIT",
   "ignore": [
